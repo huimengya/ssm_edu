@@ -33,4 +33,11 @@ public interface UserMapper {
 
     // 4.根据查询出来的角色信息查询所关联的资源信息, 角色-资源
     public List<Resource> findResourceByRoleId(List<Integer> ids);
+    
+    public void test11();
+    public void test21();
+    public void test31();
+    public void test41();
+    public void test51();
+    public void test61();
 }
