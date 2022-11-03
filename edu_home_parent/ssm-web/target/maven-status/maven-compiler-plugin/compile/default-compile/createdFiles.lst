@@ -1,0 +1,11 @@
+com\wyf\controller\PromotionAdController.class
+com\wyf\controller\TestController.class
+com\wyf\controller\CourseController.class
+com\wyf\controller\ResourceController.class
+com\wyf\controller\CourseContentController.class
+com\wyf\controller\PromotionSpaceController.class
+com\wyf\controller\MenuController.class
+com\wyf\controller\ResourceCategoryController.class
+com\wyf\controller\UserController.class
+com\wyf\controller\RoleController.class
+com\wyf\utils\FileUploadUtils.class

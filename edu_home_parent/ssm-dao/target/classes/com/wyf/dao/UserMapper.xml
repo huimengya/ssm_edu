@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wyf.dao.UserMapper">
+    <!--分页查询和多条件查询public List<User> findAllUserByPage(UserVO userVO);-->
+    <select id="findAllUserByPage" parameterType="com.wyf.domain.UserVO" resultType="com.wyf.domain.User">
+        select * from user
+        <where>
+            <if test="username != null and username !=''">
+                and name = #{username}
+            </if>
+            <if test="startCreateTime != null and endCreateTime !=null">
+                and create_time BETWEEN #{startCreateTime} AND #{endCreateTime}
+            </if>
+            <if test="true">
+                and is_del != 1
+            </if>
+        </where>
+    </select>
+
+    <!--修改用户的状态public void updateUserStatus(User user);-->
+    <update id="updateUserStatus" parameterType="com.wyf.domain.User">
+        update user set status=#{status},update_time=#{update_time} where id=#{id}
+    </update>
+
+    <!--用户登录：根据phone查询具体的用户信息public User login(User user)-->
+    <select id="login" parameterType="com.wyf.domain.User" resultType="com.wyf.domain.User">
+        select * from user where phone = #{phone}
+    </select>
+
+
+    <!--根据用户id清空关联的角色信息public void deleteUserRelationRole(Integer userId);-->
+    <delete id="deleteUserRelationRole" parameterType="int">
+        delete from user_role_relation where user_id = #{userid}
+    </delete>
+
+    <!--给用户分配角色信息public void userContextRole(User_Role_relation userRoleRelation);-->
+    <insert id="userContextRole" parameterType="com.wyf.domain.User_Role_relation">
+        insert into user_role_relation values(null,#{userId},#{roleId},#{createdTime},#{updatedTime},#{createdBy},#{updatedby})
+    </insert>
+
+    <!--1、根据用户id查询所关联的角色信息：public List<Role> findUserRoleById(Integer id);-->
+    <select id="findUserRoleById" parameterType="int" resultType="com.wyf.domain.Role">
+        SELECT * FROM roles r INNER JOIN user_role_relation ur ON r.id = ur.role_id WHERE user_id =#{id}
+    </select>
+
+    <!--2.根据角色id查询角色所关联的顶级菜单信息：多对多
+    public List<Menu> findMenuByRoleId(List<Integer> ids);-->
+    <select id="findMenuByRoleId" parameterType="java.util.List" resultType="com.wyf.domain.Menu">
+        SELECT DISTINCT m.* FROM roles r INNER JOIN role_menu_relation rm ON r.id = rm.role_id
+        INNER JOIN menu m ON rm.menu_id = m.id WHERE m.parent_id = -1 AND r.id IN
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </select>
+
+    <!--3.根据parent_id查询所有的子级菜单信息：parent_id指向id，相当于外键
+    public List<Menu> findSubMenuByPid(Integer id);
+    -->
+    <select id="findSubMenuByPid" parameterType="int" resultType="com.wyf.domain.Menu">
+        SELECT * FROM menu WHERE parent_id = #{id}
+    </select>
+
+    <!--4.根据查询出来的角色信息查询所关联的资源信息, 角色-资源
+    public List<Resource> findResourceByRoleId(List<Integer> ids);-->
+    <select id="findResourceByRoleId" parameterType="java.util.List" resultType="com.wyf.domain.Resource">
+        SELECT DISTINCT re.* FROM roles r  INNER JOIN role_resource_relation rrr ON r.id = rrr.role_id
+        INNER JOIN resource re ON rrr.resource_id = re.id
+        WHERE r.id IN
+        <foreach collection="list" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </select>
+</mapper>

@@ -1,0 +1,10 @@
+com\wyf\dao\PromotionAdMapper.class
+com\wyf\dao\CourseMapper.class
+com\wyf\dao\ResourceCategoryMapper.class
+com\wyf\dao\ResourceMapper.class
+com\wyf\dao\MenuMapper.class
+com\wyf\dao\UserMapper.class
+com\wyf\dao\CourseContentMapper.class
+com\wyf\dao\RoleMapper.class
+com\wyf\dao\PromotionSpaceMapper.class
+com\wyf\dao\TestDao.class

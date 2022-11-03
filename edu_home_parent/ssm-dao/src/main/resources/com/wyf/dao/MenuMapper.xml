@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wyf.dao.MenuMapper">
+
+    <resultMap id="menuResultMap" type="com.wyf.domain.Menu">
+        <id column="id" property="id"></id>
+        <result column="href" property="href"></result>
+        <result column="icon" property="icon"></result>
+        <result column="name" property="name"></result>
+        <result column="parent_id" property="parentId"></result>
+        <result column="description" property="description"></result>
+        <result column="orderNum" property="order_num"></result>
+        <result column="shown" property="shown"></result>
+        <result column="created_time" property="createdTime"></result>
+        <result column="updated_time" property="updatedTime"></result>
+        <result column="created_by" property="createdBy"></result>
+        <result column="updated_by" property="updatedBy"></result>
+        <collection property="subMenuList" ofType="com.wyf.domain.Menu" select="findAllMenuById" column="id"></collection>
+    </resultMap>
+    <!--查询所有的父子级菜单public List<Menu> findAllMenuById(int pid);-->
+    <select id="findAllMenuById" parameterType="int" resultMap="menuResultMap">
+        select * from menu where parent_id = #{pid}
+    </select>
+
+    <!--查询所有的菜单信息public List<Menu> findAllMenu();-->
+    <select id="findAllMenu" resultType="com.wyf.domain.Menu">
+        select * from menu
+    </select>
+
+    <!--根据id查询menu信息-->
+    <select id="findMenu" parameterType="int" resultType="com.wyf.domain.Menu">
+        select * from menu where id = #{id}
+    </select>
+
+    <!--添加菜单：public void saveMenu(Menu menu);-->
+    <insert id="saveMenu" parameterType="com.wyf.domain.Menu">
+        insert into menu values(null,#{parentId},#{href},#{icon},#{name},#{description},
+        #{orderNum},#{shown},#{level},#{createdTime},#{updatedTime},#{createdBy},#{updatedBy})
+    </insert>
+
+    <!--修改菜单成功public void updateMenu(Menu menu);-->
+    <update id="updateMenu" parameterType="com.wyf.domain.Menu">
+        update menu
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parentId !=null and parentId !=''">
+                parent_id = #{parentId},
+            </if>
+            <if test="href !=null and href !=''">
+                href = #{href},
+            </if>
+            <if test="icon !=null and icon !=''">
+                icon = #{icon},
+            </if>
+            <if test="name !=null and name !=''">
+                name = #{name},
+            </if>
+            <if test="description !=null and description !=''">
+                description = #{description},
+            </if>
+            <if test="orderNum !=null and orderNum !=''">
+                order_num = #{orderNum},
+            </if>
+            <if test="shown !=null and shown !=''">
+                shown = #{shown},
+            </if>
+            <if test="level !=null and level !=''">
+                level = #{level},
+            </if>
+            <if test="createdTime !=null">
+                created_time = #{createdTime},
+            </if>
+            <if test="updatedTime !=null">
+                updated_time = #{updatedTime},
+            </if>
+            <if test="createdBy !=null and createdBy !=''">
+                created_by = #{createdBy},
+            </if>
+            <if test="updatedBy !=null">
+                updated_by = #{updatedBy},
+            </if>
+        </trim>
+        <where>id = #{id}</where>
+    </update>
+
+    <!--删除菜单public void deleteMenu(Integer id);-->
+    <delete id="deleteMenu" parameterType="int">
+        delete from menu where id = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wyf.dao.RoleMapper">
+    <!--查询所有角色信息&条件查询:public List<Role> findAllRole(Role role);-->
+    <select id="findAllRole" parameterType="com.wyf.domain.Role" resultType="com.wyf.domain.Role">
+        select * from roles
+        <where>
+            <if test="name != null and name !=''">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+
+    <!--根据角色id查询所关联的菜单id public List<Integer> findAllMenuIdByRoleId(int roleId);-->
+    <select id="findAllMenuIdByRoleId" parameterType="int" resultType="int">
+        SELECT m.`id`FROM roles r LEFT JOIN role_menu_relation rm ON r.id =rm.`role_id`LEFT JOIN menu m ON rm.`menu_id` = m.`id` WHERE r.id =2
+    </select>
+
+    <!--为角色分配菜单信息-->
+    <!--删除关联-->
+    <delete id="deleteRoleMenu" parameterType="int">
+        delete from role_menu_relation where role_id =#{rid}
+    </delete>
+
+    <!--为角色分配信息public void saveRoleMenu(Role_menu_relation roleMenuRelation);-->
+    <insert id="saveRoleMenu" parameterType="com.wyf.domain.Role_menu_relation">
+        insert into role_menu_relation values(null,#{menuId},#{roleId},#{createdTime},#{updatedTime},#{createdBy},#{updatedby})
+    </insert>
+
+    <!--删除角色：public void deleteRole(Integer rid);-->
+    <delete id="deleteRole" parameterType="int">
+        delete from roles where id = #{rid}
+    </delete>
+</mapper>
+
+
+
+

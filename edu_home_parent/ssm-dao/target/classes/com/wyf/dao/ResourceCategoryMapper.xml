@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wyf.dao.ResourceCategoryMapper">
+    <!--查询资源分类信息public List<ResourceCategory> findAllResourceCategory();-->
+    <select id="findAllResourceCategory" resultType="com.wyf.domain.ResourceCategory">
+        select * from resource_category
+    </select>
+</mapper>
